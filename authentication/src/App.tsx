@@ -1,15 +1,25 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import Navbar from './Components/Navbar'
 
+import tw from "tailwind-styled-components"
+import Register from './Components/Register';
+
+const Container = tw.div`
+     w-full 
+     px-16 
+     py-10
+`;
+
 function App() {
-  const [count, setCount] = useState(0)
+
 
   return (
     <>
-      <Navbar/>
+      <Navbar />
+      <Container>
+        <Register />
+      </Container>
     </>
   )
 }
