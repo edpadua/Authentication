@@ -8,6 +8,10 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 import * as yup from 'yup'
 
+import axios, { AxiosResponse } from 'axios';
+
+const REGISTER_URL = '/register';
+
 const Form = tw.form`
    
 `;
@@ -17,16 +21,27 @@ w-full h-10 px-3 mb-2 text-base text-gray-700 placeholder-gray-600 border rounde
 `;
 
 
+const Button = tw.button`
+bg-cyan-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded
+`;
+
+
 type Inputs = {
     name: string;
     email: string;
-    password: string;
+    password:string;
+    confirm_password:string;
 };
 
 const schema = yup.object().shape({
     name: yup.string().required(),
     email: yup.string().required().email('Email is invalid'),
-    password: yup.string().min(6)
+    password: yup.string().required().matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{6,})/,
+        "Must Contain 6 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
+      ),
+    confirm_password: 
+    yup.string().required('Password confirmation is required').oneOf([yup.ref('password')], 'Passwords must match'),
 })
 
 function Register() {
@@ -35,7 +50,16 @@ function Register() {
         resolver: yupResolver(schema)
     });
 
-    const onSubmit: SubmitHandler<Inputs> = data => console.log(data);
+    const onSubmit: SubmitHandler<Inputs> = async (data) => {
+        try {
+            const response: AxiosResponse<Inputs> = await axios.post("http://localhost:3000/users", data);
+            console.log(response);
+          } catch (error) {
+            console.log(error);
+          }
+   
+    }
+
 
     return (
         <div>
@@ -46,7 +70,10 @@ function Register() {
                 <Input {...register('email')} placeholder="Digite o e-mail"/>
                 <p>{errors.email?.message}</p>
                 <Input type='password' {...register('password')} placeholder="Digite a senha" />
-                <Input type='submit' />
+                <p>{errors.password?.message}</p>
+                <Input type='password' {...register('confirm_password')} placeholder="Confirme a senha" />
+                <p>{errors.confirm_password?.message}</p>
+                <Button type="submit">Registrar</Button>
             </form>
         </div>
     )
