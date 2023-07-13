@@ -1,9 +1,12 @@
 import { useState } from 'react'
 import './App.css'
 import Navbar from './Components/Navbar'
+import Footer from './Components/Footer'
 
 import tw from "tailwind-styled-components"
 import Register from './Components/Register';
+
+import Login from './Components/Login';
 
 const Container = tw.div`
      w-full 
@@ -18,8 +21,9 @@ function App() {
     <>
       <Navbar />
       <Container>
-        <Register />
+         <Register/>
       </Container>
+      <Footer/>
     </>
   )
 }

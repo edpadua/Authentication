@@ -10,20 +10,9 @@ import * as yup from 'yup'
 
 import axios, { AxiosResponse } from 'axios';
 
+import { Form, Input, Button } from '../../GlobalStyles';
+
 const REGISTER_URL = '/register';
-
-const Form = tw.form`
-   
-`;
-
-const Input = tw.input`
-w-full h-10 px-3 mb-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline
-`;
-
-
-const Button = tw.button`
-bg-cyan-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded
-`;
 
 
 type Inputs = {
@@ -46,14 +35,25 @@ const schema = yup.object().shape({
 
 function Register() {
 
-    const { register, handleSubmit,formState: { errors } } = useForm<Inputs>({
+    const { register, handleSubmit, reset, formState: { errors } } = useForm<Inputs>({
         resolver: yupResolver(schema)
     });
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
         try {
-            const response: AxiosResponse<Inputs> = await axios.post("http://localhost:3000/users", data);
-            console.log(response);
+            console.log("data",data);
+            const response: AxiosResponse<Inputs> = await axios.post("http://localhost:3000/users", JSON.stringify(data),
+            {
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
+            });
+            console.log(JSON.stringify(response?.data));
+            reset({
+                name: "",
+                email: "",
+                password: "",
+                confirm_password:"",
+              })
           } catch (error) {
             console.log(error);
           }
@@ -63,7 +63,7 @@ function Register() {
 
     return (
         <div>
-            <form onSubmit={(event) =>
+            <Form onSubmit={(event) =>
                 void handleSubmit(onSubmit)(event)}>
                 <Input {...register('name')} placeholder="Digite o nome"/>
                 <p>{errors.name?.message}</p>
@@ -74,7 +74,7 @@ function Register() {
                 <Input type='password' {...register('confirm_password')} placeholder="Confirme a senha" />
                 <p>{errors.confirm_password?.message}</p>
                 <Button type="submit">Registrar</Button>
-            </form>
+            </Form>
         </div>
     )
 }

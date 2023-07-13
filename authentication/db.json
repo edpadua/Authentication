@@ -1,10 +1,8 @@
 {
   "users": [
     {
-      "name": "Eduardo de Pádua Castro Santos",
-      "email": "ed.padua@gmail.com",
+      "userName": "ed.padua@gmail.com",
       "password": "Au8db%",
-      "confirm_password": "Au8db%",
       "id": 1
     }
   ]
