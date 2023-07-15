@@ -71,7 +71,7 @@ function Register() {
                 <p>{errors.email?.message}</p>
                 <Input type='password' {...register('password')} placeholder="Digite a senha" />
                 <p>{errors.password?.message}</p>
-                <Input type='password' {...register('confirm_password')} placeholder="Confirme a senha" />
+                <Input type='password' {...register('confirm_password')} placeholder="Digite a senha novamente para confirmar" />
                 <p>{errors.confirm_password?.message}</p>
                 <Button type="submit">Registrar</Button>
             </Form>
